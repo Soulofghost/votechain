@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoteChain | On-Chain Governance & Quadratic Voting</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <header class="navbar">
+      <div class="nav-brand">
+        <div class="brand-vote">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 20V10"/>
+            <path d="M12 20V4"/>
+            <path d="M6 20v-6"/>
+          </svg>
+        </div>
+        <div>
+          <h2>VoteChain</h2>
+          <span class="tagline">QUADRATIC GOVERNANCE PROTOCOL</span>
+        </div>
+      </div>
+
+      <div class="nav-stats">
+        <div class="stat-pill">
+          <span class="stat-label">TOKENS COMMITTED</span>
+          <span class="stat-val text-blue" id="tokensCommitted">185,000 $VOTE</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">ACTIVE PROPOSALS</span>
+          <span class="stat-val" id="activeProposals">1 Live Vote</span>
+        </div>
+        <button class="btn btn-primary" id="openCreateProposalModal">+ New Proposal</button>
+      </div>
+    </header>
+
+    <main class="main-container">
+      <div class="top-row">
+        <div>
+          <h1>Decentralized Governance Proposals</h1>
+          <p class="subtitle">Anti-plutocratic snapshot voting where vote weight equals the square root of committed tokens &radic;(T)</p>
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-status="ALL">All</button>
+          <button class="filter-tab" data-status="ACTIVE">Active</button>
+          <button class="filter-tab" data-status="EXECUTED">Passed & Executed</button>
+          <button class="filter-tab" data-status="DEFEATED">Defeated</button>
+        </div>
+      </div>
+
+      <!-- Quadratic Calculator Card -->
+      <div class="calculator-banner">
+        <div class="calc-info">
+          <h4>Quadratic Voting Weight Calculator</h4>
+          <p>Demonstrates how quadratic voting dampens token whale influence: 100x tokens yields only 10x voting weight.</p>
+        </div>
+        <div class="calc-inputs">
+          <div class="calc-field">
+            <label>Tokens Committed ($VOTE)</label>
+            <input type="number" id="calcTokenInput" value="10000" min="1" step="100">
+          </div>
+          <div class="calc-result">
+            <span class="calc-label">VOTING POWER WEIGHT</span>
+            <span class="calc-val" id="calcWeightOutput">100.00 votes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="proposals-grid" id="proposalsGrid">
+        <div class="loading-state">Loading on-chain governance proposals...</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: Create Proposal -->
+  <div class="modal-overlay" id="createProposalModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Draft Governance Proposal</h3>
+        <button class="btn-close" id="closeCreateBtn">&times;</button>
+      </div>
+      <form id="createProposalForm">
+        <div class="field">
+          <label>Proposal Title *</label>
+          <input type="text" id="propTitle" required placeholder="e.g. AIP-45: Allocate Core Developer Grants">
+        </div>
+        <div class="field">
+          <label>Category *</label>
+          <select id="propCategory">
+            <option value="Protocol Upgrade">Protocol Upgrade</option>
+            <option value="Treasury & Grants">Treasury & Grants</option>
+            <option value="DeFi & Liquidity">DeFi & Liquidity</option>
+            <option value="Security Policy">Security Policy</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Quorum Threshold ($VOTE) *</label>
+            <input type="number" id="propQuorum" required min="1000" value="50000">
+          </div>
+          <div class="field">
+            <label>Voting Duration (Days) *</label>
+            <input type="number" id="propDuration" required min="1" max="30" value="7">
+          </div>
+        </div>
+        <div class="field">
+          <label>Proposal Description & Execution Spec *</label>
+          <textarea id="propDesc" rows="3" required placeholder="Detailed motivation, implementation architecture, and parameters..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelCreateBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Deploy Proposal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Vote & Detail Modal -->
+  <div class="modal-overlay" id="voteModal">
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3 id="voteModalTitle">Proposal Governance</h3>
+        <button class="btn-close" id="closeVoteBtn">&times;</button>
+      </div>
+      <div class="modal-body" id="voteModalContent">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  votechain:
+    build: .
+    ports:
+      - "4026:4026"
+    environment:
+      - NODE_ENV=production
+      - PORT=4026
+    volumes:
+      - votechain_data:/app/backend/data
+    restart: unless-stopped
+
+volumes:
+  votechain_data:
